@@ -1,93 +1,154 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Plugins / Vundle
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
+" Keep Plugin commands between vundle#begin/end.
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
-
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
+" plugin on GitHub repo / tpope
 Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-obsession'
 " Utilities - plugin from http://vim-scripts.org/vim/scripts.html
 Plugin 'L9'
 " Calendar
-"Plugin 'itchyny/calendar.vim'
+Plugin 'itchyny/calendar.vim'
 " Colors
 Plugin 'git://github.com/altercation/vim-colors-solarized.git'
 " Scala for Vim
 Bundle 'derekwyatt/vim-scala'
 " NERD commenter
 Plugin 'git://github.com/scrooloose/nerdcommenter.git'
-" FuzzyFinder
-"Plugin 'git://github.com/atom/fuzzy-finder.git'
 " CtrlP for file and tag finding
 Plugin 'https://github.com/ctrlpvim/ctrlp.vim'
 " Expand region for quick selection in visual mode ..
 Plugin 'https://github.com/terryma/vim-expand-region.git'
-" C++ autocompletion
-"Plugin 'https://github.com/Valloric/YouCompleteMe.git'
 " vim-airline, powerline derivative control bar thing
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 " web design
 Plugin 'mattn/emmet-vim'
-" rst stuff
-Bundle 'Rykka/riv.vim'
+" rst stuff / Nice but would hang with long lines
+"Bundle 'Rykka/riv.vim'
+" Vimux for commanding tmux
+"Plugin 'benmills/vimux'
+" Dart tools
+Plugin 'dart-lang/dart-vim-plugin'
+" PlantUML syntax
+Plugin 'aklt/plantuml-syntax'
+" Latex stuff
+Plugin 'lervag/vimtex'
+" neocomplete for autocompletion. Replaces youcompleteme
+Plugin 'shougo/neocomplete.vim'
+" R integration to vim
+Plugin 'jalvesaq/Nvim-R'
+" Haskell
+Plugin 'neovimhaskell/haskell-vim'
+" Dependency for easytags
+" Requires Excuberant ctags (or universal-ctags on arch)
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-easytags'
+" tagbar using easytags to display a summary of tags in file
+Plugin 'majutsushi/tagbar'
+" Switching between headers and implementations in cpp
+Plugin 'derekwyatt/vim-fswitch'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
 
-" Google calendar sync
-let g:calendar_google_calendar = 1
-let g:calendar_google_task = 1
-let g:calendar_week_number = 1
-let g:calendar_first_day = "monday"
+""""""""""""""""""""""""""""""
+" => Status line
+""""""""""""""""""""""""""""""
+" Always show the status line
+set laststatus=2
+" Format the status line
+"set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
+" powerline fonts for vim-airline
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme = 'dark'
 
-" vim-scala
-let g:scala_use_default_keymappings = 1
-
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Colours, solarized, monokai etc
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Color scheme
 syntax enable
-
 "set nocompatible                                                  
 set t_Co=256
 set background=dark
+" Solarized
 "let g:solarized_termtrans=1
 "let g:solarized_termcolors=256
 "colorscheme solarized
+" Molokai
 "" original monokai background color
 "let g:molokai_original = 1
 "" alternative, more truthful to 256 color scheme
 let g:rehash256 = 1
 colorscheme molokai
-
 " Highlight search results
 set hlsearch
-
 " Show matching brackets when text indicator is over them
 set showmatch
 " " How many tenths of a second to blink when matching brackets
 set mat=2
-
 " Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf-8
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => UI
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"enabling mouse for quick course of actions = moar redraws
+set ttyfast
+" Enable mouse use in all modes
+set mouse=a
+" Set this to the name of your terminal that supports mouse codes.
+" Must be one of: xterm, xterm2, netterm, dec, jsbterm, pterm
+set ttymouse=xterm
+
+" Window movement shortcuts
+" Window Functions / from nicknisi/vim-workshop
+map <C-h> :call WinMove('h')<cr>
+map <C-j> :call WinMove('j')<cr>
+map <C-k> :call WinMove('k')<cr>
+map <C-l> :call WinMove('l')<cr>
+" move to the window in the direction shown
+" Split/create a new window if at the edge
+function! WinMove(key)
+    let t:curwin = winnr()
+    exec "wincmd ".a:key
+    if (t:curwin == winnr())
+        if (match(a:key,'[jk]'))
+            wincmd v
+        else
+            wincmd s
+        endif
+        exec "wincmd ".a:key
+    endif
+endfunction
+"
+" mapping leader to space
+let mapleader = "\ "
+" Happy copy-pasting
+nnoremap <Leader>o :CtrlP<CR>
+nnoremap <Leader>w :w<CR>
+nnoremap <Leader>q :q<CR>
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
+nmap <Leader><CR> O<C-c>
+nnoremap <Leader><Leader> <C-v>
+nnoremap <Leader>- 60i-<C-c>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files, backups and undo
@@ -97,14 +158,9 @@ set nobackup
 set nowb
 set noswapfile
 set clipboard=unnamedplus
-
-" Emmet.vim specified only for html and css
-let g:user_emmet_install_global = 0
-autocmd FileType html,css EmmetInstall
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Jedi autocompletions
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Where to place newly created windows (by ctrlp)
+let g:ctrlp_open_new_file = 'v'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
@@ -128,57 +184,236 @@ set breakindent showbreak=\ \
 " set foldmethod=indent foldcolumn=1
 set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 nnoremap ; :
-""""""""""""""""""""""""""""""
-" => Status line
-""""""""""""""""""""""""""""""
-" Always show the status line
-set laststatus=2
-" Format the status line
-"set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
-" powerline fonts for vim-airline
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme = 'dark'
 
-""""""""""""""""""""""""""""""
-" => mapping ftw
-""""""""""""""""""""""""""""""
-let mapleader = "\ "
-nnoremap <Leader>o :CtrlP<CR>
-nnoremap <Leader>w :w<CR>
-nnoremap <Leader>q :q<CR>
-vmap <Leader>y "+y
-vmap <Leader>d "+d
-nmap <Leader>p "+p
-nmap <Leader>P "+P
-vmap <Leader>p "+p
-vmap <Leader>P "+P
-nmap <Leader><CR> O<C-c>
-nnoremap <Leader><Leader> <C-v>
-nnoremap <Leader>- 60i-<C-c>
-"plantuml short key
-nnoremap <Leader>U :w tmp.uml\|!cat tmp.uml\| plantuml -p \| feh - \| rm tmp.uml<CR>
-"enabling mouse for quick course of actions
-"moar redraws
-set ttyfast
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Scala and Java (eclim etc)     
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim-scala
+let g:scala_use_default_keymappings = 1
 
-" Enable mouse use in all modes
-set mouse=a
-
-" Set this to the name of your terminal that supports mouse codes.
-" Must be one of: xterm, xterm2, netterm, dec, jsbterm, pterm
-set ttymouse=xterm
-
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Python
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Quick shot python
+nnoremap <Leader>P :w<CR>:!python %<CR>
+"
 "ctags
 "set tags=tags;/
 set tags=./.tags,.tags,./tags,tags
-
-" mergetool
-nmap ]r :diffget RE
-nmap ]l :diffget LO
-
 " gvim options
 :set guioptions-=m  "remove menu bar
 :set guioptions-=T  "remove toolbar
 :set guioptions-=r  "remove right-hand scroll bar
 :set guioptions-=L  "remove left-hand scroll bar
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => bash scripting
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Running script
+nnoremap <Leader>b :w<CR>:!chmod +x %<CR>:!bash %<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Web dev
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Emmet.vim specified only for html and css
+let g:user_emmet_install_global = 0
+autocmd FileType html,css EmmetInstall
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Git
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" mergetool
+nmap ]r :diffget RE
+nmap ]l :diffget LO
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Calendars and other utils
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Google calendar sync
+let g:calendar_google_calendar = 1
+let g:calendar_google_task = 1
+let g:calendar_week_number = 1
+let g:calendar_first_day = "monday"
+"
+"plantuml short key
+nnoremap <Leader>U :w tmp.uml\|!cat tmp.uml\| plantuml -p \| feh - \| rm tmp.uml<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Tmux / Vimux
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <C-v> :VimuxRunCommand("")<LEFT><LEFT>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Drag Visuals / Damien Conway
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+vmap  <expr>  <LEFT>   DVB_Drag('left')
+vmap  <expr>  <RIGHT>  DVB_Drag('right')
+vmap  <expr>  <DOWN>   DVB_Drag('down')
+vmap  <expr>  <UP>     DVB_Drag('up')
+vmap  <expr>  D        DVB_Duplicate()
+let g:DVB_TrimWS = 1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => vmath - columnar quick maths / Damien Conway
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+vmap <silent><expr>  ++  VMATH_YankAndAnalyse()
+nmap <silent>        ++  vip++
+
+nmap ;ss    :set    spell   spellang=en-basic<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => vim latex realtime viewer
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:livepreview_previewer = 'zathura'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Autocompletion Configurations for neocomplete
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Note: This option must be set in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+        \ }
+
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+  " For no inserting <CR> key.
+  "return pumvisible() ? "\<C-y>" : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
+
+" AutoComplPop like behavior.
+"let g:neocomplete#enable_auto_select = 1
+
+" Shell like behavior(not recommended).
+"set completeopt+=longest
+"let g:neocomplete#enable_auto_select = 1
+"let g:neocomplete#disable_auto_complete = 1
+"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+"autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+" vimtex autocompletions
+let g:neocomplete#sources#omni#input_patterns.tex =
+        \ g:vimtex#re#neocomplete
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Jedi
+"
+" Starting on 2017 jedi started spewing it's suggestions into the
+" file without removing them when exiting the insert view. Thus it
+" resulted in millions of back-and-forth actions because the python files
+" wouldn't run - obviously.
+"
+" use jedi completions for python with neocomplete
+"if !exists('g:neocomplete#force_omni_input_patterns')
+    "let g:neocomplete#force_omni_input_patterns = {}
+"endif
+"autocmd FileType python setlocal omnifunc=jedi#completions
+"let g:jedi#auto_vim_configuration = 0
+"let g:jedi#popup_on_dot = 0
+"let g:neocomplete#force_omni_input_patterns.python = '[^. \t]\.\w*'
+
+" For perlomni.vim setting.
+" https://github.com/c9s/perlomni.vim
+"let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Quick explorer (netrw) invocation
+let g:netrw_liststyle = 3
+map <Leader>x :Explore<cr>
+map <Leader>s :Sexplore<cr>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Load all plugins now (vim8 needs no plugin managers(?))
+" Plugins need to be added to runtimepath before helptags can be generated.
+packloadall
+" Load all of the helptags now, after plugins have been loaded.
+" All messages and errors will be ignored.
+silent! helptags ALL
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Ale linting, fixing and more..
+" Python fixers
+let g:ale_fixers = {'python': ['autopep8','isort']}
+
+let g:ale_lint_on_insert_leave = 1
+
+" Bind F8 to fixing problems with ALE
+nmap <F8> <Plug>(ale_fix)
+
+" Ale + airline config
+let g:airline#extensions#ale#enabled = 1
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Tagbar with ctags
+" Tagbar quickkey
+nmap <F9> :TagbarToggle<CR>
+nmap <F10> :UpdateTags<CR>
+
+let g:easytags_ctags_version = 5.8
+
+" Mappings for FSwitch that switches between headers and implementations
+" derekwyatt/vim-FSwitch
+" Used to be <Leader>o but that is mapped to ctrlp
+"- Switch to the file and load it into the current window >
+nmap <silent> <Leader>ff :FSHere<cr>
+"- Switch tf the file and lfad it intf the windfw fn the right >
+nmap <silent> <Leader>fl :FSRight<cr>
+"- Switch tf the file and lfad it intf a new windfw split fn the right >
+nmap <silent> <Leader>fL :FSSplitRight<cr>
+"- Switch tf the file and lfad it intf the windfw fn the left >
+nmap <silent> <Leader>fh :FSLeft<cr>
+"- Switch tf the file and lfad it intf a new windfw split fn the left >
+nmap <silent> <Leader>fH :FSSplitLeft<cr>
+"- Switch tf the file and lfad it intf the windfw abfve >
+nmap <silent> <Leader>fk :FSAbove<cr>
+"- Switch tf the file and lfad it intf a new windfw split abfve >
+nmap <silent> <Leader>fK :FSSplitAbove<cr>
+"- Switch tf the file and lfad it intf the windfw belfw >
+nmap <silent> <Leader>fj :FSBelow<cr>
+"- Switch tf the file and lfad it intf a new windfw split belfw >
+nmap <silent> <Leader>fJ :FSSplitBelow<cr>
