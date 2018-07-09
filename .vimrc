@@ -31,7 +31,7 @@ Plugin 'https://github.com/terryma/vim-expand-region.git'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 " web design
-Plugin 'mattn/emmet-vim'
+"Plugin 'mattn/emmet-vim'
 " rst stuff / Nice but would hang with long lines
 "Bundle 'Rykka/riv.vim'
 " Vimux for commanding tmux
@@ -56,6 +56,14 @@ Plugin 'xolox/vim-easytags'
 Plugin 'majutsushi/tagbar'
 " Switching between headers and implementations in cpp
 Plugin 'derekwyatt/vim-fswitch'
+" Outliner
+Plugin 'vimoutliner/vimoutliner'
+" Supercollider in vim
+Plugin 'supercollider/scvim'
+" Snippet engine
+Plugin 'SirVer/ultisnips'
+" Snippets are separated from the engine. Add this if you want them:
+Plugin 'honza/vim-snippets'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -378,7 +386,10 @@ silent! helptags ALL
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Ale linting, fixing and more..
 " Python fixers
-let g:ale_fixers = {'python': ['autopep8','isort']}
+let g:ale_fixers = {
+\ 'python': ['autopep8','isort', 'remove_trailing_lines', 'trim_whitespace'],
+\ 'cpp': ['clang-format', 'remove_trailing_lines', 'trim_whitespace'],
+\ 'c': ['clang-format', 'remove_trailing_lines', 'trim_whitespace']}
 
 let g:ale_lint_on_insert_leave = 1
 
@@ -417,3 +428,23 @@ nmap <silent> <Leader>fK :FSSplitAbove<cr>
 nmap <silent> <Leader>fj :FSBelow<cr>
 "- Switch tf the file and lfad it intf a new windfw split belfw >
 nmap <silent> <Leader>fJ :FSSplitBelow<cr>
+
+" Overriding vimoutliner tabsettings
+au BufEnter *.otl setlocal tabstop=2
+au BufEnter *.otl setlocal shiftwidth=2
+
+" cppman for cpp reference with shift+k
+autocmd FileType cpp set keywordprg=cppman
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Snippets
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
