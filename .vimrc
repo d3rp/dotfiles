@@ -16,7 +16,7 @@ Plugin 'tpope/vim-obsession'
 " Utilities - plugin from http://vim-scripts.org/vim/scripts.html
 Plugin 'L9'
 " Calendar
-Plugin 'itchyny/calendar.vim'
+"Plugin 'itchyny/calendar.vim'
 " Colors
 Plugin 'git://github.com/altercation/vim-colors-solarized.git'
 " Scala for Vim
@@ -37,13 +37,13 @@ Plugin 'mattn/emmet-vim'
 " Vimux for commanding tmux
 "Plugin 'benmills/vimux'
 " Dart tools
-Plugin 'dart-lang/dart-vim-plugin'
+"Plugin 'dart-lang/dart-vim-plugin'
 " PlantUML syntax
 Plugin 'aklt/plantuml-syntax'
 " Latex stuff
-Plugin 'lervag/vimtex'
+"Plugin 'lervag/vimtex'
 " neocomplete for autocompletion. Replaces youcompleteme
-Plugin 'shougo/neocomplete.vim'
+"Plugin 'shougo/neocomplete.vim'
 " R integration to vim
 Plugin 'jalvesaq/Nvim-R'
 " Haskell
@@ -56,9 +56,12 @@ Plugin 'xolox/vim-easytags'
 Plugin 'majutsushi/tagbar'
 " Switching between headers and implementations in cpp
 Plugin 'derekwyatt/vim-fswitch'
+" diary and outliner
+Plugin 'vimoutliner/vimoutliner'
+" Ale linter
+"Plugin 'w0rp/ale'
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
+" All of your Plugins must be added before the following line call vundle#end()            " required
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 filetype plugin on
@@ -74,6 +77,7 @@ set laststatus=2
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme = 'dark'
+set guifont=Source\ Code\ Pro\ for\ Powerline
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colours, solarized, monokai etc
@@ -89,7 +93,7 @@ set background=dark
 "colorscheme solarized
 " Molokai
 "" original monokai background color
-"let g:molokai_original = 1
+let g:molokai_original = 1
 "" alternative, more truthful to 256 color scheme
 let g:rehash256 = 1
 colorscheme molokai
@@ -264,7 +268,7 @@ nmap ;ss    :set    spell   spellang=en-basic<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => vim latex realtime viewer
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:livepreview_previewer = 'zathura'
+"let g:livepreview_previewer = 'zathura'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Autocompletion Configurations for neocomplete
@@ -307,8 +311,8 @@ endfunction
 " <TAB>: completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 " <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+"inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+"inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 " Close popup by <Space>.
 "inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
 
@@ -337,8 +341,8 @@ let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
 " vimtex autocompletions
-let g:neocomplete#sources#omni#input_patterns.tex =
-        \ g:vimtex#re#neocomplete
+"let g:neocomplete#sources#omni#input_patterns.tex =
+"        \ g:vimtex#re#neocomplete
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Jedi
@@ -417,3 +421,10 @@ nmap <silent> <Leader>fK :FSSplitAbove<cr>
 nmap <silent> <Leader>fj :FSBelow<cr>
 "- Switch tf the file and lfad it intf a new windfw split belfw >
 nmap <silent> <Leader>fJ :FSSplitBelow<cr>
+
+" vim-easytags
+set cpo+=d
+set tags=./tags;
+let g:easytags_dynamic_files = 2
+let g:easytags_autorecurse = 1
+
