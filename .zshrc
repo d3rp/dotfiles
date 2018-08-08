@@ -80,6 +80,7 @@ export PROJECT_HOME=$HOME/code/src
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export EDITOR=vim
+export VISUAL=$EDITOR
 # source /usr/local/bin/virtualenvwrapper.sh
 
 PATH=$PATH:~/code/src/bin/:/Users/jt/Library/Python/2.7/bin
@@ -150,3 +151,7 @@ alias refcard='zathura ~/docs/refcard.pdf'
 
 # virtualenv
 alias va='source venv/bin/activate'
+
+# mac lsregister to clean up launch services database
+# https://eclecticlight.co/2017/08/11/launch-services-database-problems-correcting-and-rebuilding/
+alias lsr='sudo /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
