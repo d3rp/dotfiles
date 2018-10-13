@@ -155,3 +155,32 @@ alias va='source venv/bin/activate'
 # mac lsregister to clean up launch services database
 # https://eclecticlight.co/2017/08/11/launch-services-database-problems-correcting-and-rebuilding/
 alias lsr='sudo /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
+alias pvr='pipenv run'
+alias pvrp='pipenv run python'
+alias pvrm='pipenv run python -m'
+cpu_usage() (
+    ps -e -o %cpu | awk '{s+=$1} END {print s}'
+)
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+say () {
+    pushd /Users/${USER}/code/src/py/pronounce &&\
+    pvrm say $@;
+    popd
+}
+
+alias ackp='ack --type=cpp --pager=less'
+
+words () {
+	grep --color=auto -o --extended-regexp '[A-Z]?[a-z]{2,64}' "$@" | tr '[A-Z]' '[a-z]' | sort | uniq -c | sort -r
+}
+mcw () {
+	words "${@:2}" | awk '{printf $2"\n"}' | head -n $1
+}
+pipe_words () {
+	grep --color=auto -o --extended-regexp '[a-zA-Z]+' - | sort | uniq -c | sort -r
+}
+pipe_mcw () {
+	pipe_words | awk '{printf $2"\n"}' | head -n 4
+}
