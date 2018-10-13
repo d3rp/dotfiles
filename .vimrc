@@ -1,75 +1,86 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
+"filetype off                  " required
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugins / Vundle
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
+"set rtp+=~/.vim/bundle/Vundle.vim
 " Keep Plugin commands between vundle#begin/end.
-call vundle#begin()
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-" plugin on GitHub repo / tpope
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-obsession'
-" Utilities - plugin from http://vim-scripts.org/vim/scripts.html
-Plugin 'L9'
-" Calendar
-Plugin 'itchyny/calendar.vim'
-" Colors
-Plugin 'git://github.com/altercation/vim-colors-solarized.git'
-" Scala for Vim
-Bundle 'derekwyatt/vim-scala'
-" NERD commenter
-Plugin 'git://github.com/scrooloose/nerdcommenter.git'
-" CtrlP for file and tag finding
-Plugin 'https://github.com/ctrlpvim/ctrlp.vim'
-" Expand region for quick selection in visual mode ..
-Plugin 'https://github.com/terryma/vim-expand-region.git'
-" vim-airline, powerline derivative control bar thing
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-" web design
-"Plugin 'mattn/emmet-vim'
-" rst stuff / Nice but would hang with long lines
-"Bundle 'Rykka/riv.vim'
-" Vimux for commanding tmux
-"Plugin 'benmills/vimux'
-" Dart tools
-Plugin 'dart-lang/dart-vim-plugin'
-" PlantUML syntax
-Plugin 'aklt/plantuml-syntax'
-" Latex stuff
-Plugin 'lervag/vimtex'
-" neocomplete for autocompletion. Replaces youcompleteme
-Plugin 'shougo/neocomplete.vim'
-" R integration to vim
-Plugin 'jalvesaq/Nvim-R'
-" Haskell
-Plugin 'neovimhaskell/haskell-vim'
-" Dependency for easytags
-" Requires Excuberant ctags (or universal-ctags on arch)
-Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-easytags'
-" tagbar using easytags to display a summary of tags in file
-Plugin 'majutsushi/tagbar'
-" Switching between headers and implementations in cpp
-Plugin 'derekwyatt/vim-fswitch'
-" Outliner
-Plugin 'vimoutliner/vimoutliner'
-" Supercollider in vim
-Plugin 'supercollider/scvim'
-" Snippet engine
-Plugin 'SirVer/ultisnips'
-" Snippets are separated from the engine. Add this if you want them:
-Plugin 'honza/vim-snippets'
+"call vundle#begin()
+"
+" Changed to dein
+if &compatible
+ set nocompatible
+endif
+" Add the dein installation directory into runtimepath
+set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
+if dein#load_state('~/.cache/dein')
+ call dein#begin('~/.cache/dein')
+
+ call dein#add('~/.cache/dein')
+ " deoplete replaces neocomplete
+ call dein#add('Shougo/deoplete.nvim')
+ if !has('nvim')
+   " Recommended for deoplete by its docs 
+   call dein#add('roxma/nvim-yarp')
+   call dein#add('roxma/vim-hug-neovim-rpc')
+ else
+   call dein#add('zchee/deoplete-jedi')
+   call dein#add('neovim/python-client')
+    "Jedi for python
+   "call dein#add('davidhalter/jedi')
+ endif
+ " Utilities - plugin from http://vim-scripts.org/vim/scripts.html
+ call dein#add('vim-scripts/L9')
+ " plugin on GitHub repo / tpope
+ call dein#add('tpope/vim-fugitive')
+ " Moar tpope
+ call dein#add('tpope/vim-obsession')
+ " Colors
+ call dein#add('altercation/vim-colors-solarized.git')
+ " NERD commenter
+ call dein#add('scrooloose/nerdcommenter.git')
+ " CtrlP for file and tag finding
+ call dein#add('ctrlpvim/ctrlp.vim')
+ " Expand region for quick selection in visual mode ..
+ call dein#add('terryma/vim-expand-region.git')
+ " vim-airline, powerline derivative control bar thing
+ call dein#add('vim-airline/vim-airline')
+ " Themes. .. 
+ call dein#add('vim-airline/vim-airline-themes')
+ " PlantUML syntax
+ call dein#add('aklt/plantuml-syntax')
+ " Latex stuff
+ "Plugin 'lervag/vimtex'
+ " R integration to vim
+ call dein#add('jalvesaq/Nvim-R')
+ " Haskell
+ "Plugin 'neovimhaskell/haskell-vim'
+ " Dependency for easytags
+ call dein#add('xolox/vim-misc')
+ " Requires Excuberant ctags (or universal-ctags on arch)
+ call dein#add('xolox/vim-easytags')
+ " tagbar using easytags to display a summary of tags in file
+ call dein#add('majutsushi/tagbar')
+ " Switching between headers and implementations in cpp
+ call dein#add('derekwyatt/vim-fswitch')
+ " diary and outliner
+ call dein#add('vimoutliner/vimoutliner')
+ " Ale linter
+ "Plugin 'w0rp/ale'
+ " pydoc for shift-K python documentation
+ call dein#add('fs111/pydoc.vim')
+
+ call dein#end()
+ call dein#save_state()
+endif
+
+" All of your Plugins must be added before the following line call vundle#end()            " required
 filetype plugin indent on    " required
+syntax enable
 " To ignore plugin indent changes, instead use:
-filetype plugin on
+"filetype plugin on
 
 """"""""""""""""""""""""""""""
 " => Status line
@@ -82,6 +93,7 @@ set laststatus=2
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme = 'dark'
+set guifont=Source\ Code\ Pro\ for\ Powerline
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colours, solarized, monokai etc
@@ -97,7 +109,7 @@ set background=dark
 "colorscheme solarized
 " Molokai
 "" original monokai background color
-"let g:molokai_original = 1
+let g:molokai_original = 1
 "" alternative, more truthful to 256 color scheme
 let g:rehash256 = 1
 colorscheme molokai
@@ -119,7 +131,9 @@ set ttyfast
 set mouse=a
 " Set this to the name of your terminal that supports mouse codes.
 " Must be one of: xterm, xterm2, netterm, dec, jsbterm, pterm
-set ttymouse=xterm
+if !has('nvim')
+    set ttymouse=xterm2
+endif
 
 " Window movement shortcuts
 " Window Functions / from nicknisi/vim-workshop
@@ -165,7 +179,7 @@ nnoremap <Leader>- 60i-<C-c>
 set nobackup
 set nowb
 set noswapfile
-set clipboard=unnamedplus
+set clipboard^=unnamed
 "
 " Where to place newly created windows (by ctrlp)
 let g:ctrlp_open_new_file = 'v'
@@ -194,20 +208,29 @@ set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 nnoremap ; :
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Deoplete configuration for autocompletion
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:deoplete#enable_at_startup = 1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Scala and Java (eclim etc)     
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " vim-scala
-let g:scala_use_default_keymappings = 1
+"let g:scala_use_default_keymappings = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Python
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Quick shot python
-nnoremap <Leader>P :w<CR>:!python %<CR>
+nnoremap <Leader>P :w<CR>:!python3 %<CR>
 "
 "ctags
 "set tags=tags;/
 set tags=./.tags,.tags,./tags,tags
+map tn :tn<CR>
+map tp :tp<CR>
+
 " gvim options
 :set guioptions-=m  "remove menu bar
 :set guioptions-=T  "remove toolbar
@@ -272,81 +295,7 @@ nmap ;ss    :set    spell   spellang=en-basic<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => vim latex realtime viewer
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:livepreview_previewer = 'zathura'
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Autocompletion Configurations for neocomplete
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"Note: This option must be set in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-
-" Define dictionary.
-let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
-
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-  " For no inserting <CR> key.
-  "return pumvisible() ? "\<C-y>" : "\<CR>"
-endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-" Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
-
-" AutoComplPop like behavior.
-"let g:neocomplete#enable_auto_select = 1
-
-" Shell like behavior(not recommended).
-"set completeopt+=longest
-"let g:neocomplete#enable_auto_select = 1
-"let g:neocomplete#disable_auto_complete = 1
-"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-"autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-" Enable heavy omni completion.
-if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
-endif
-"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
-" vimtex autocompletions
-let g:neocomplete#sources#omni#input_patterns.tex =
-        \ g:vimtex#re#neocomplete
+"let g:livepreview_previewer = 'zathura'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Jedi
@@ -357,7 +306,7 @@ let g:neocomplete#sources#omni#input_patterns.tex =
 " wouldn't run - obviously.
 "
 " use jedi completions for python with neocomplete
-"if !exists('g:neocomplete#force_omni_input_patterns')
+"if !exists('g:deoplete#force_omni_input_patterns')
     "let g:neocomplete#force_omni_input_patterns = {}
 "endif
 "autocmd FileType python setlocal omnifunc=jedi#completions
@@ -429,6 +378,7 @@ nmap <silent> <Leader>fj :FSBelow<cr>
 "- Switch tf the file and lfad it intf a new windfw split belfw >
 nmap <silent> <Leader>fJ :FSSplitBelow<cr>
 
+<<<<<<< HEAD
 " Overriding vimoutliner tabsettings
 au BufEnter *.otl setlocal tabstop=2
 au BufEnter *.otl setlocal shiftwidth=2
@@ -448,3 +398,12 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 
+=======
+" vim-easytags
+"set cpo+=d
+"set tags=./tags;
+"let g:easytags_dynamic_files = 2
+"let g:easytags_autorecurse = 1
+
+map <Leader>W :'<,'>w! ~/.vbuf<CR>:!. ~/.zshrc && mcw 6 ~/.vbuf<CR>
+>>>>>>> 651d96cc6bff17e67d73aff2cca36ebcb8127dd3

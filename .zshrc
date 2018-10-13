@@ -1,6 +1,17 @@
 # Path to your oh-my-zsh installation.
 #export ZSH=
 
+# Executes commands at the start of an interactive session.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
+
+# Customize to your needs...
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -64,7 +75,20 @@ plugins=(git)
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-export EDITOR='vim'
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/code/src
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export EDITOR=vim
+export VISUAL=$EDITOR
+# source /usr/local/bin/virtualenvwrapper.sh
+
+PATH=$PATH:~/code/src/bin/:/Users/jt/Library/Python/2.7/bin
+if [[ -z $TMUX ]]; then
+    tmux
+fi
+alias vim='/usr/local/bin/vim'
+eval "$(pyenv init -)"
 # else
 #   export EDITOR='mvim'
 # fi
@@ -74,6 +98,7 @@ export EDITOR='vim'
 
 # ssh
 export SSH_KEY_PATH="~/.ssh/dsa_id"
+
 
 # Add to your Bash config file
 SSHAGENT=/usr/bin/ssh-agent
@@ -96,7 +121,7 @@ fi
 ## Personal aliases
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias rr=ranger
-alias ls='ls --color=auto'
+#alias ls='ls --color=auto'
 alias db=dropbox-cli 
 
 # when calendar preference
@@ -116,13 +141,46 @@ alias calv='vim -c Cal'
 alias abbssh='ssh-add ~/.ssh/bitbucket'
 
 # motd
-~/.motd.sh
+#~/.motd.sh
 
 # aws completion
-source $( which aws_zsh_completer.sh )
+#source $( which aws_zsh_completer.sh )
 
 # zsh cheat sheet
 alias refcard='zathura ~/docs/refcard.pdf'
 
 # virtualenv
 alias va='source venv/bin/activate'
+
+# mac lsregister to clean up launch services database
+# https://eclecticlight.co/2017/08/11/launch-services-database-problems-correcting-and-rebuilding/
+alias lsr='sudo /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
+alias pvr='pipenv run'
+alias pvrp='pipenv run python'
+alias pvrm='pipenv run python -m'
+cpu_usage() (
+    ps -e -o %cpu | awk '{s+=$1} END {print s}'
+)
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+say () {
+    pushd /Users/${USER}/code/src/py/pronounce &&\
+    pvrm say $@;
+    popd
+}
+
+alias ackp='ack --type=cpp --pager=less'
+
+words () {
+	grep --color=auto -o --extended-regexp '[A-Z]?[a-z]{2,64}' "$@" | tr '[A-Z]' '[a-z]' | sort | uniq -c | sort -r
+}
+mcw () {
+	words "${@:2}" | awk '{printf $2"\n"}' | head -n $1
+}
+pipe_words () {
+	grep --color=auto -o --extended-regexp '[a-zA-Z]+' - | sort | uniq -c | sort -r
+}
+pipe_mcw () {
+	pipe_words | awk '{printf $2"\n"}' | head -n 4
+}
