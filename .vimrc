@@ -25,6 +25,11 @@ if dein#load_state('~/.cache/dein')
    " Recommended for deoplete by its docs 
    call dein#add('roxma/nvim-yarp')
    call dein#add('roxma/vim-hug-neovim-rpc')
+ else
+   call dein#add('zchee/deoplete-jedi')
+   call dein#add('neovim/python-client')
+    "Jedi for python
+   "call dein#add('davidhalter/jedi')
  endif
  " Utilities - plugin from http://vim-scripts.org/vim/scripts.html
  call dein#add('vim-scripts/L9')
@@ -64,6 +69,8 @@ if dein#load_state('~/.cache/dein')
  call dein#add('vimoutliner/vimoutliner')
  " Ale linter
  "Plugin 'w0rp/ale'
+ " pydoc for shift-K python documentation
+ call dein#add('fs111/pydoc.vim')
 
  call dein#end()
  call dein#save_state()
@@ -221,6 +228,9 @@ nnoremap <Leader>P :w<CR>:!python3 %<CR>
 "ctags
 "set tags=tags;/
 set tags=./.tags,.tags,./tags,tags
+map tn :tn<CR>
+map tp :tp<CR>
+
 " gvim options
 :set guioptions-=m  "remove menu bar
 :set guioptions-=T  "remove toolbar
@@ -296,7 +306,7 @@ nmap ;ss    :set    spell   spellang=en-basic<CR>
 " wouldn't run - obviously.
 "
 " use jedi completions for python with neocomplete
-"if !exists('g:neocomplete#force_omni_input_patterns')
+"if !exists('g:deoplete#force_omni_input_patterns')
     "let g:neocomplete#force_omni_input_patterns = {}
 "endif
 "autocmd FileType python setlocal omnifunc=jedi#completions
@@ -371,3 +381,4 @@ nmap <silent> <Leader>fJ :FSSplitBelow<cr>
 "let g:easytags_dynamic_files = 2
 "let g:easytags_autorecurse = 1
 
+map <Leader>W :'<,'>w! ~/.vbuf<CR>:!. ~/.zshrc && mcw 6 ~/.vbuf<CR>
