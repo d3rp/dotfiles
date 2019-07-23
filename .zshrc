@@ -83,8 +83,10 @@ export EDITOR=vim
 export VISUAL=$EDITOR
 # source /usr/local/bin/virtualenvwrapper.sh
 
+export GOPATH=~/go
+
 PATH=$PATH:~/code/src/bin/:/Users/jt/Library/Python/2.7/bin
-if [[ -z $TMUX ]]; then
+if [[ -z $TMUX ]] && [[ $TERMINAL_EMULATOR != "JetBrains-JediTerm" ]]; then
     tmux
 fi
 alias vim='/usr/local/bin/vim'
@@ -108,6 +110,9 @@ if [ -z "$SSH_AUTH_SOCK" -a -x "$SSHAGENT" ]; then
     trap "kill $SSH_AGENT_PID" 0
 fi
 
+export NVM_DIR="$HOME/.nvm"
+  [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion
 # add ssh keys for easy access
 #ssh-add ~/.ssh/gitlab_niksula
 
@@ -170,7 +175,14 @@ say () {
     popd
 }
 
-alias ackp='ack --type=cpp --pager=less'
+alias ackpl='ack --type=cpp --pager=less'
+ackp () {
+    ack --type=cpp --group $@ | grep -v '\/\*' - |  bat -l cpp --theme TwoDark
+}
+
+ackpy () {
+    ack --type=python --group $@ | grep -v '#.*' - |  grep -v '.*""".*' - | bat -l py --theme TwoDark
+}
 
 words () {
 	grep --color=auto -o --extended-regexp '[A-Z]?[a-z]{2,64}' "$@" | tr '[A-Z]' '[a-z]' | sort | uniq -c | sort -r
@@ -183,4 +195,33 @@ pipe_words () {
 }
 pipe_mcw () {
 	pipe_words | awk '{printf $2"\n"}' | head -n 4
+}
+svim () {
+    # docker server test
+    server_response="$( docker ps 2>&1 1>/dev/null )"
+    if [[ -n "$server_response" ]]; then
+        printf "$server_response \n"
+        return
+    fi
+
+    if [[ $# > 1 ]]; then
+        docker run -it -v ~/.SpaceVim.d:/home/spacevim/.SpaceVim.d -v "$PWD":/home/spacevim/local spacevim/spacevim nvim /home/spacevim/local/"$@"
+    else
+        docker run -it -v ~/.SpaceVim.d:/home/spacevim/.SpaceVim.d -v "$PWD":/home/spacevim/local spacevim/spacevim nvim
+    fi
+}
+tail_log () {
+	tail -f $@ | egrep '(\w+(<[^>]+>)?)+::[^~]+)|$' --color=always
+}
+
+iman () {
+    arg=${1?"Usage: $0 <command>"}
+    pushd ~/code/src/py/igrepper        &&\
+    pvr igrepper -c 3 <( man $@ )       &&\
+    popd
+}
+
+docker-gc () {
+    #https://github.com/spotify/docker-gc
+    docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc:ro spotify/docker-gc
 }

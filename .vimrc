@@ -15,17 +15,18 @@ endif
 " Add the dein installation directory into runtimepath
 set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
 
+" Install with ```call dein#install()```
 if dein#load_state('~/.cache/dein')
  call dein#begin('~/.cache/dein')
 
  call dein#add('~/.cache/dein')
  " deoplete replaces neocomplete
  call dein#add('Shougo/deoplete.nvim')
- if !has('nvim')
+ if has('nvim')
    " Recommended for deoplete by its docs 
    call dein#add('roxma/nvim-yarp')
    call dein#add('roxma/vim-hug-neovim-rpc')
- else
+   call dein#add('numirias/semshi')
    call dein#add('zchee/deoplete-jedi')
    call dein#add('neovim/python-client')
     "Jedi for python
@@ -35,7 +36,7 @@ if dein#load_state('~/.cache/dein')
  call dein#add('vim-scripts/L9')
  " plugin on GitHub repo / tpope
  call dein#add('tpope/vim-fugitive')
- " Moar tpope
+ " Moar tpope (tmux resurrect interaction)
  call dein#add('tpope/vim-obsession')
  " Colors
  call dein#add('altercation/vim-colors-solarized.git')
@@ -71,6 +72,8 @@ if dein#load_state('~/.cache/dein')
  "Plugin 'w0rp/ale'
  " pydoc for shift-K python documentation
  call dein#add('fs111/pydoc.vim')
+ " wiki notes, diary, todo lists ...
+ call dein#add('vimwiki/vimwiki')
 
  call dein#end()
  call dein#save_state()
@@ -254,8 +257,9 @@ autocmd FileType html,css EmmetInstall
 " => Git
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " mergetool
-nmap ]r :diffget RE
-nmap ]l :diffget LO
+nmap ]b :diffget BASE<CR>
+nmap ]r :diffget REMOTE<CR>
+nmap ]l :diffget LOCAL<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Calendars and other utils
