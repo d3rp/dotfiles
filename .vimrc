@@ -382,7 +382,6 @@ nmap <silent> <Leader>fj :FSBelow<cr>
 "- Switch tf the file and lfad it intf a new windfw split belfw >
 nmap <silent> <Leader>fJ :FSSplitBelow<cr>
 
-<<<<<<< HEAD
 " Overriding vimoutliner tabsettings
 au BufEnter *.otl setlocal tabstop=2
 au BufEnter *.otl setlocal shiftwidth=2
@@ -401,13 +400,3 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
-
-=======
-" vim-easytags
-"set cpo+=d
-"set tags=./tags;
-"let g:easytags_dynamic_files = 2
-"let g:easytags_autorecurse = 1
-
-map <Leader>W :'<,'>w! ~/.vbuf<CR>:!. ~/.zshrc && mcw 6 ~/.vbuf<CR>
->>>>>>> 651d96cc6bff17e67d73aff2cca36ebcb8127dd3
