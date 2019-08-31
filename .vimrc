@@ -61,7 +61,7 @@ if dein#load_state('~/.cache/dein')
  " Dependency for easytags
  call dein#add('xolox/vim-misc')
  " Requires Excuberant ctags (or universal-ctags on arch)
- call dein#add('xolox/vim-easytags')
+ call dein#add('Wraul/vim-easytags', {'rev': 'fix-universal-detection'})
  " tagbar using easytags to display a summary of tags in file
  call dein#add('majutsushi/tagbar')
  " Switching between headers and implementations in cpp
