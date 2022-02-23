@@ -217,7 +217,7 @@ tail_log () {
 iman () {
     arg=${1?"Usage: $0 <command>"}
     pushd ~/code/src/py/igrepper        &&\
-    pvr igrepper -c 3 <( man $@ )       &&\
+    pvr igrepper -c 3 <( man $@ )
     popd
 }
 
@@ -225,3 +225,8 @@ docker-gc () {
     #https://github.com/spotify/docker-gc
     docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc:ro spotify/docker-gc
 }
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/vault vault
+alias poetry='python3 -m poetry'
+alias dephell='python3 -m dephell'

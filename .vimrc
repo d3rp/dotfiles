@@ -271,7 +271,7 @@ let g:calendar_week_number = 1
 let g:calendar_first_day = "monday"
 "
 "plantuml short key
-nnoremap <Leader>U :w tmp.uml\|!cat tmp.uml\| plantuml -p \| feh - \| rm tmp.uml<CR>
+nnoremap <Leader>U :w tmp.uml\|!cat tmp.uml\| plantuml -p \| open -a preview - \| rm tmp.uml<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Tmux / Vimux
@@ -360,6 +360,7 @@ nmap <F10> :UpdateTags<CR>
 
 let g:easytags_ctags_version = 5.8
 
+""""""""""""""""""""""""""""""""""""""""""""""""""
 " Mappings for FSwitch that switches between headers and implementations
 " derekwyatt/vim-FSwitch
 " Used to be <Leader>o but that is mapped to ctrlp
@@ -400,3 +401,50 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
+
+" VimWiki setup
+let g:vimwiki_list = [{'list_margin': 2}]
+nmap <Leader>t <Plug>VimwikiToggleListItem
+au BufEnter *.wiki setlocal shiftwidth=2
+
+nmap <Leader>e :vimgrep /\cerror/j %<CR>:cwindow<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => vimwiki
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function! VimwikiLinkHandler(link)
+  " Use Vim to open external files with the 'vfile:' scheme.  E.g.:
+  "   1) [[vfile:~/Code/PythonProject/abc123.py]]
+  "   2) [[vfile:./|Wiki Home]]
+  let link = a:link
+  if link =~# '^vfile:'
+    let link = link[1:]
+  else
+    return 0
+  endif
+  let link_infos = vimwiki#base#resolve_link(link)
+  if link_infos.filename == ''
+    echomsg 'Vimwiki Error: Unable to resolve link!'
+    return 0
+  else
+    exe 'tabnew ' . fnameescape(link_infos.filename)
+    return 1
+  endif
+endfunction
+
+let g:tagbar_type_vimwiki = {
+          \   'ctagstype':'vimwiki'
+          \ , 'kinds':['h:header']
+          \ , 'sro':'&&&'
+          \ , 'kind2scope':{'h':'header'}
+          \ , 'sort':0
+          \ , 'ctagsbin':'/Users/jt/.vim/vwtags.py'
+          \ , 'ctagsargs': 'default'
+          \ }
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => misc
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Quick buffers
+noremap <Leader>b :ls<CR>:b 
