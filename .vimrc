@@ -21,7 +21,7 @@ if dein#load_state('~/.cache/dein')
 
  call dein#add('~/.cache/dein')
  " deoplete replaces neocomplete
- call dein#add('Shougo/deoplete.nvim')
+ call dein#add('shougo/deoplete.nvim')
  if has('nvim')
    " Recommended for deoplete by its docs 
    call dein#add('roxma/nvim-yarp')
@@ -32,30 +32,40 @@ if dein#load_state('~/.cache/dein')
     "Jedi for python
    "call dein#add('davidhalter/jedi')
  endif
+
+ " colorschemes
+ "call dein#add('tomasr/molokai')
+ "call dein#add('joshdick/onedark.vim')
+ "call dein#add('altercation/vim-colors-solarized.git')
+ call dein#add('sainnhe/sonokai')
+ " Themes. .. 
+ "call dein#add('vim-airline/vim-airline-themes')
+ call dein#add('nvim-treesitter/nvim-treesitter', {'hook_post_update': 'TSUpdate'})
+
+
  " Utilities - plugin from http://vim-scripts.org/vim/scripts.html
  call dein#add('vim-scripts/L9')
  " plugin on GitHub repo / tpope
  call dein#add('tpope/vim-fugitive')
  " Moar tpope (tmux resurrect interaction)
  call dein#add('tpope/vim-obsession')
- " Colors
- call dein#add('altercation/vim-colors-solarized.git')
- " NERD commenter
+
+ " NERD commenter and NERDTree
  call dein#add('scrooloose/nerdcommenter.git')
+ call dein#add('preservim/nerdtree')
+
  " CtrlP for file and tag finding
  call dein#add('ctrlpvim/ctrlp.vim')
  " Expand region for quick selection in visual mode ..
  call dein#add('terryma/vim-expand-region.git')
  " vim-airline, powerline derivative control bar thing
  call dein#add('vim-airline/vim-airline')
- " Themes. .. 
- call dein#add('vim-airline/vim-airline-themes')
  " PlantUML syntax
  call dein#add('aklt/plantuml-syntax')
  " Latex stuff
  "Plugin 'lervag/vimtex'
  " R integration to vim
- call dein#add('jalvesaq/Nvim-R')
+ "call dein#add('jalvesaq/Nvim-R')
  " Haskell
  "Plugin 'neovimhaskell/haskell-vim'
  " Dependency for easytags
@@ -74,6 +84,14 @@ if dein#load_state('~/.cache/dein')
  call dein#add('fs111/pydoc.vim')
  " wiki notes, diary, todo lists ...
  call dein#add('vimwiki/vimwiki')
+ " rust
+ call dein#add('rust-lang/rust.vim')
+ call dein#add('neoclide/coc.nvim', { 'merged': 0, 'rev': 'master', 'build': 'yarn install --frozen-lockfile' })
+
+ call dein#add('stevearc/dressing.nvim')
+ call dein#add('nvim-lua/plenary.nvim')
+ call dein#add('mfussenegger/nvim-dap')
+ call dein#add('Shatur/neovim-cmake')
 
  call dein#end()
  call dein#save_state()
@@ -95,8 +113,9 @@ set laststatus=2
 " powerline fonts for vim-airline
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme = 'dark'
-set guifont=Source\ Code\ Pro\ for\ Powerline
+"let g:airline_theme = 'dark'
+set guifont=Source\ Code\ Pro\ for\ Powerline:h13
+"set guifont=Inconsolata\ for\ Powerline:h13
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colours, solarized, monokai etc
@@ -112,10 +131,18 @@ set background=dark
 "colorscheme solarized
 " Molokai
 "" original monokai background color
-let g:molokai_original = 1
+"let g:molokai_original = 1
 "" alternative, more truthful to 256 color scheme
-let g:rehash256 = 1
-colorscheme molokai
+"let g:rehash256 = 1
+"colorscheme molokai
+
+if has('termguicolors')
+  set termguicolors
+endif
+let g:sonokai_style = 'atlantis'
+let g:sonokai_better_performance = 1
+colorscheme sonokai
+
 " Highlight search results
 set hlsearch
 " Show matching brackets when text indicator is over them
@@ -124,6 +151,11 @@ set showmatch
 set mat=2
 " Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf-8
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Treesitter, language parsing
+
+luafile ~/.treesitter_config.lua
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => UI
@@ -186,6 +218,7 @@ set clipboard^=unnamed
 "
 " Where to place newly created windows (by ctrlp)
 let g:ctrlp_open_new_file = 'v'
+let g:ctrlp_extensions = ['buffertag']
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
@@ -227,10 +260,11 @@ let g:deoplete#enable_at_startup = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Quick shot python
 nnoremap <Leader>P :w<CR>:!python3 %<CR>
-"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "ctags
-"set tags=tags;/
 set tags=./.tags,.tags,./tags,tags
+
 map tn :tn<CR>
 map tp :tp<CR>
 
@@ -244,7 +278,7 @@ map tp :tp<CR>
 " => bash scripting
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Running script
-nnoremap <Leader>b :w<CR>:!chmod +x %<CR>:!bash %<CR>
+nnoremap <Leader>B :w<CR>:!chmod +x %<CR>:!bash %<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Web dev
@@ -276,7 +310,7 @@ nnoremap <Leader>U :w tmp.uml\|!cat tmp.uml\| plantuml -p \| open -a preview - \
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Tmux / Vimux
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <C-v> :VimuxRunCommand("")<LEFT><LEFT>
+"nnoremap <C-v> :VimuxRunCommand("")<LEFT><LEFT>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Drag Visuals / Damien Conway
@@ -325,7 +359,7 @@ nmap ;ss    :set    spell   spellang=en-basic<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Quick explorer (netrw) invocation
 let g:netrw_liststyle = 3
-map <Leader>x :Explore<cr>
+"map <Leader>x :Explore<cr>
 map <Leader>s :Sexplore<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
@@ -359,6 +393,17 @@ nmap <F9> :TagbarToggle<CR>
 nmap <F10> :UpdateTags<CR>
 
 let g:easytags_ctags_version = 5.8
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim configuration
+
+nmap \e :e ~/.vimrc<CR>
+nmap \r :source $MYVIMRC<CR>:call dein#install()<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Navigation
+
+nmap <Leader>x :NERDTree<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Mappings for FSwitch that switches between headers and implementations
@@ -402,16 +447,18 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => vimwiki
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " VimWiki setup
 let g:vimwiki_list = [{'list_margin': 2}]
+let g:vimwiki_listsyms = ' ◤▣'
+let g:vimwiki_folding = 'list'
+
 nmap <Leader>t <Plug>VimwikiToggleListItem
 au BufEnter *.wiki setlocal shiftwidth=2
 
 nmap <Leader>e :vimgrep /\cerror/j %<CR>:cwindow<CR>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => vimwiki
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! VimwikiLinkHandler(link)
   " Use Vim to open external files with the 'vfile:' scheme.  E.g.:
@@ -439,12 +486,28 @@ let g:tagbar_type_vimwiki = {
           \ , 'sro':'&&&'
           \ , 'kind2scope':{'h':'header'}
           \ , 'sort':0
-          \ , 'ctagsbin':'/Users/jt/.vim/vwtags.py'
+          \ , 'ctagsbin':'/Users/dev/.vim/vimwiki_tags.py'
           \ , 'ctagsargs': 'default'
           \ }
+let g:tagbar_singleclick = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => misc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Relative or absolute number lines
+function! NumberToggle()
+    if(&nu == 1)
+        set nu!
+        set rnu
+    else
+        set nornu
+        set nu
+    endif
+endfunction
+
+nnoremap <Leader>n :call NumberToggle()<CR>
+" toggle line number modes
 
 " Quick buffers
 noremap <Leader>b :ls<CR>:b 
+
+noremap <Leader>W :read !python ~/code/py/print_weekday.py<CR>

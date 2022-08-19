@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # Path to your oh-my-zsh installation.
 #export ZSH=
 
@@ -61,7 +68,7 @@ fi
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+# plugins=(git)
 
 # User configuration
 
@@ -85,11 +92,15 @@ export VISUAL=$EDITOR
 
 export GOPATH=~/go
 
-PATH=$PATH:~/code/src/bin/:/Users/jt/Library/Python/2.7/bin
+PATH=$PATH:~/code/bin
 if [[ -z $TMUX ]] && [[ $TERMINAL_EMULATOR != "JetBrains-JediTerm" ]]; then
     tmux
 fi
-alias vim='/usr/local/bin/vim'
+
+export PATH=$PATH:$HOME/.cargo/bin
+# alias vim='/usr/local/bin/vim'
+#export PYENV_ROOT="$HOME/.pyenv"
+#export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 # else
 #   export EDITOR='mvim'
@@ -230,3 +241,99 @@ autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/vault vault
 alias poetry='python3 -m poetry'
 alias dephell='python3 -m dephell'
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/dev/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/dev/opt/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/dev/opt/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/dev/opt/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+export HOMEBREW_NO_ANALYTICS=1
+function nv ()
+{
+#    local nv_config_path="$HOME/.config/nvim"
+#    local nv_basic_config_path="$HOME/.config/nvim-basic"
+#    local nv_doom_config_path="$HOME/.config/nvim-doom"
+#    if [[ -L "$nv_config_path" ]]; then
+#       rm -f "$nv_config_path"
+#    fi
+#    /bin/ln -s "$nv_basic_config_path" "$nv_config_path"
+
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        virtualenv="$VIRTUAL_ENV"
+        deactivate
+        nvim $@
+        source "$virtualenv"/bin/activate
+    else
+        nvim $@
+    fi
+
+}
+# function doom ()
+# {
+#     local nv_config_path="$HOME/.config/nvim"
+#     local nv_basic_config_path="$HOME/.config/nvim-basic"
+#     local nv_doom_config_path="$HOME/.config/nvim-doom"
+#     if [[ -L "$nv_config_path" ]]; then
+#        rm -f "$nv_config_path"
+#     fi
+#     /bin/ln -s "$nv_doom_config_path" "$nv_config_path"
+# 
+#     if [[ -n "$VIRTUAL_ENV" ]]; then
+#         virtualenv="$VIRTUAL_ENV"
+#         deactivate
+#         CC=gcc nvim $@
+#         source "$virtualenv"/bin/activate
+#     else
+#         CC=gcc nvim $@
+#     fi
+# }
+#alias nv=nvim
+#source ~/powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+#[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+source /Users/dev/pipo.bash
+
+# Auto-activate pyenv-virtualenv when navigating to dir
+if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+ass() { bat --color always -l s <<<$(clang++ -S -Ofast -o /dev/stdout "$1" ) }
+
+vw_sync () {
+    echo '== Checking macmini -> local =='
+    rsync -havzP --update macmini:vimwiki/ ~/vimwiki/
+
+    echo '== Checking macmini <- local =='
+    rsync -havzP --update ~/vimwiki/ macmini:vimwiki/
+}
+now () {
+    #python -c 'from datetime import datetime; print(datetime.now().isoformat().replace(":", "."))' | tee pbcopy
+    python -c 'from datetime import datetime; print(datetime.now().isoformat().replace(":", "."))' | tee >&2 | pbcopy <<<2
+}
+
+function vactivate () {
+    if [[ ! -d .venv ]]; then
+        python -m venv .venv
+    fi
+    source .venv/bin/activate
+}
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+function pbclone ()
+{
+    git clone git@bitbucket.org:pluginbabylon/"$1"
+}
+
