@@ -86,7 +86,7 @@ export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/code/src
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-export EDITOR=vim
+export EDITOR=nvim
 export VISUAL=$EDITOR
 # source /usr/local/bin/virtualenvwrapper.sh
 
@@ -335,5 +335,21 @@ source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 function pbclone ()
 {
     git clone git@bitbucket.org:pluginbabylon/"$1"
+}
+
+function html2pdf ()
+{
+    # brew install librsvg python homebrew/cask/basictex pandoc
+    # restart iterm
+    local source="${1?"Usage $0 <source_file (html)> <destination (pdf)>"}"
+    local destination="${2?"Usage $0 <source_file (html)> <destination (pdf)>"}"
+    pandoc "$source" -t latex -o "$destination" --pdf-engine=/Library/TeX/texbin/xelatex
+}
+
+function choose ()
+{
+    local check=${1?"Usage choose [options...]"}
+    local arr=(${@:1})
+    echo "${arr[$(( ($RANDOM % ${#})+1 ))]}"
 }
 
