@@ -155,7 +155,7 @@ set encoding=utf-8
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Treesitter, language parsing
 
-luafile ~/.treesitter_config.lua
+"luafile ~/.treesitter_config.lua
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => UI
