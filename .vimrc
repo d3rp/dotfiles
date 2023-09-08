@@ -14,6 +14,7 @@ if &compatible
 endif
 " Add the dein installation directory into runtimepath
 set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
+set runtimepath+=/opt/homebrew/opt/fzf
 
 " Install with ```call dein#install()```
 if dein#load_state('~/.cache/dein')
@@ -33,22 +34,31 @@ if dein#load_state('~/.cache/dein')
    "call dein#add('davidhalter/jedi')
  endif
 
+ " ./install --all so the interactive script doesn't block
+ " you can check the other command line options  in the install file
+ call dein#add('junegunn/fzf', { 'build': './install --all', 'rtp': '', 'merged': 0 }) 
+ call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
+
  " colorschemes
  "call dein#add('tomasr/molokai')
- "call dein#add('joshdick/onedark.vim')
+ "call dein#add('itchyny/lightline.vim')
+ call dein#add('joshdick/onedark.vim')
  "call dein#add('altercation/vim-colors-solarized.git')
- call dein#add('sainnhe/sonokai')
+ "call dein#add('sainnhe/sonokai')
  " Themes. .. 
- "call dein#add('vim-airline/vim-airline-themes')
- call dein#add('nvim-treesitter/nvim-treesitter', {'hook_post_update': 'TSUpdate'})
+ call dein#add('vim-airline/vim-airline-themes')
+ "call dein#add('nvim-treesitter/nvim-treesitter', {'hook_post_update': 'TSUpdate'})
 
-
+ call dein#add('sheerun/vim-polyglot')
  " Utilities - plugin from http://vim-scripts.org/vim/scripts.html
  call dein#add('vim-scripts/L9')
  " plugin on GitHub repo / tpope
  call dein#add('tpope/vim-fugitive')
  " Moar tpope (tmux resurrect interaction)
  call dein#add('tpope/vim-obsession')
+
+ " Devops crap - Ansible
+ call dein#add('pearofducks/ansible-vim')
 
  " NERD commenter and NERDTree
  call dein#add('scrooloose/nerdcommenter.git')
@@ -93,6 +103,8 @@ if dein#load_state('~/.cache/dein')
  call dein#add('mfussenegger/nvim-dap')
  call dein#add('Shatur/neovim-cmake')
 
+ call dein#add('mattn/emmet-vim')
+ call dein#add('pangloss/vim-javascript')
  call dein#end()
  call dein#save_state()
 endif
@@ -113,7 +125,7 @@ set laststatus=2
 " powerline fonts for vim-airline
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-"let g:airline_theme = 'dark'
+"let g:airline_theme = 'onedark'
 set guifont=Source\ Code\ Pro\ for\ Powerline:h13
 "set guifont=Inconsolata\ for\ Powerline:h13
 
@@ -125,6 +137,11 @@ syntax enable
 "set nocompatible                                                  
 set t_Co=256
 set background=dark
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Themes
+""""""""""""""""""""""""""""""""""""""""""""""""""
+
 " Solarized
 "let g:solarized_termtrans=1
 "let g:solarized_termcolors=256
@@ -139,9 +156,11 @@ set background=dark
 if has('termguicolors')
   set termguicolors
 endif
-let g:sonokai_style = 'atlantis'
-let g:sonokai_better_performance = 1
-colorscheme sonokai
+"let g:sonokai_style = 'atlantis'
+"let g:sonokai_better_performance = 1
+"colorscheme sonokai
+
+colorscheme onedark
 
 " Highlight search results
 set hlsearch
@@ -151,6 +170,9 @@ set showmatch
 set mat=2
 " Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf-8
+
+" set ripgrep as external grep program
+"set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Treesitter, language parsing
@@ -197,6 +219,7 @@ let mapleader = "\ "
 nnoremap <Leader>o :CtrlP<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
+nnoremap <Leader>Q :xa<CR>
 vmap <Leader>y "+y
 vmap <Leader>d "+d
 nmap <Leader>p "+p
@@ -260,6 +283,21 @@ let g:deoplete#enable_at_startup = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Quick shot python
 nnoremap <Leader>P :w<CR>:!python3 %<CR>
+
+" Run the file and save stdout to clipboard
+nnoremap \p :let @+=system("python3 " . shellescape(expand("%")))<CR>
+
+
+function! CalcScoreLine()
+    let saved_reg = @@
+
+    normal yy
+    let scoreline = @@
+    let @@="    - " . system("python3 $HOME/code/py/scoreline.py " . shellescape(scoreline))
+    normal p
+
+    let @@ = saved_reg
+endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "ctags
@@ -453,7 +491,7 @@ let g:UltiSnipsEditSplit="vertical"
 " VimWiki setup
 let g:vimwiki_list = [{'list_margin': 2}]
 let g:vimwiki_listsyms = ' ◤▣'
-let g:vimwiki_folding = 'list'
+"let g:vimwiki_folding = 'list'
 
 nmap <Leader>t <Plug>VimwikiToggleListItem
 au BufEnter *.wiki setlocal shiftwidth=2
@@ -486,10 +524,24 @@ let g:tagbar_type_vimwiki = {
           \ , 'sro':'&&&'
           \ , 'kind2scope':{'h':'header'}
           \ , 'sort':0
-          \ , 'ctagsbin':'/Users/dev/.vim/vimwiki_tags.py'
+          \ , 'ctagsbin':'$HOME/.vim/vimwiki_tags.py'
           \ , 'ctagsargs': 'default'
           \ }
 let g:tagbar_singleclick = 1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => fzf
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:fzf_layout = { 'window': { 'width': 1.0, 'height': 0.45, 'relative': v:true, 'yoffset': 1.0 } }
+
+command! -bang -nargs=* Vwrg 
+  \ call fzf#vim#grep("rg --line-number --no-heading --color=always --smart-case -- ".shellescape(<q-args>)." ~/vimwiki",
+  \ {'options': ['--preview', '~/.cache/dein/repos/github.com/junegunn/fzf.vim/bin/preview.sh {}']},
+  \ <bang>0)
+
+
+nnoremap \f :Vwrg<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => misc
@@ -511,4 +563,6 @@ nnoremap <Leader>n :call NumberToggle()<CR>
 " Quick buffers
 noremap <Leader>b :ls<CR>:b 
 
-noremap <Leader>W :read !python ~/code/py/print_weekday.py<CR>
+"noremap <Leader>W :read !python ~/code/py/print_weekday.py<CR>
+noremap <Leader>W :read !~/code/bin/weekday<CR>
+

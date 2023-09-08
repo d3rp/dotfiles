@@ -1,3 +1,6 @@
+# Set vim mode keymappings to readline
+bindkey -v 
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -91,6 +94,7 @@ export VISUAL=$EDITOR
 # source /usr/local/bin/virtualenvwrapper.sh
 
 export GOPATH=~/go
+export VCPKG_ROOT="$HOME/vcpkg"
 
 PATH=$PATH:~/code/bin
 if [[ -z $TMUX ]] && [[ $TERMINAL_EMULATOR != "JetBrains-JediTerm" ]]; then
@@ -244,14 +248,14 @@ alias dephell='python3 -m dephell'
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/dev/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$('$HOME/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/Users/dev/opt/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/dev/opt/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "$HOME/opt/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "$HOME/opt/anaconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/Users/dev/opt/anaconda3/bin:$PATH"
+        export PATH="$HOME/opt/anaconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
@@ -303,7 +307,7 @@ function nv ()
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 #[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-source /Users/dev/pipo.bash
+source $HOME/pipo.bash
 
 # Auto-activate pyenv-virtualenv when navigating to dir
 if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
@@ -324,13 +328,21 @@ now () {
 function vactivate () {
     if [[ ! -d .venv ]]; then
         python -m venv .venv
+        source .venv/bin/activate
+        pip install -U pip
+    else
+        source .venv/bin/activate
     fi
-    source .venv/bin/activate
 }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# SDK paths
+export VST2_SDK_PATH=$HOME/SDKs/vstsdk2.4 
+export VST3_SDK_PATH=$HOME/SDKs/VST_SDK_3.7.1/VST3_SDK 
+export AAX_SDK_PATH=$HOME/SDKs/AAX 
 
 function pbclone ()
 {
@@ -346,10 +358,33 @@ function html2pdf ()
     pandoc "$source" -t latex -o "$destination" --pdf-engine=/Library/TeX/texbin/xelatex
 }
 
+function presentation ()
+{
+    cd ~/presiis/slides
+    open -n -a "Brave Browser" --args --new-window 'http://localhost:8080/'
+    marp -s .
+    cd -
+}
+
+export JUCE_DIR=~/code/plugins/JUCE
+
+# Created by `pipx` on 2023-04-10 09:45:09
+export PATH="$PATH:$HOME/.local/bin"
+
+function fix_submodules ()
+{
+    git submodule sync --recursive
+    git submodule update --init --recursive --remote
+    git pull --recurse-submodules
+}
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 function choose ()
 {
     local check=${1?"Usage choose [options...]"}
     local arr=(${@:1})
-    echo "${arr[$(( ($RANDOM % ${#})+1 ))]}"
+    echo "${ arr[$(( ($RANDOM % ${#})+1 ))] }"
 }
+
 
