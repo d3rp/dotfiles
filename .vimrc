@@ -495,6 +495,7 @@ let g:vimwiki_listsyms = ' ◤▣'
 
 nmap <Leader>t <Plug>VimwikiToggleListItem
 au BufEnter *.wiki setlocal shiftwidth=2
+au BufEnter *.wiki setlocal tw=80
 
 nmap <Leader>e :vimgrep /\cerror/j %<CR>:cwindow<CR>
 

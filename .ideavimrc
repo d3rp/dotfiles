@@ -1,0 +1,105 @@
+" Source your .vimrc
+source ~/.vimrc
+
+" Show a few lines of context around the cursor. Note that this makes the
+" text scroll if you mouse-click near the start or end of the window.
+set scrolloff=5
+
+" Do incremental searching.
+set incsearch
+
+" Clipboard handling
+set clipboard=unnamed,unnamedplus
+set clipboard+=ideaput
+
+" idea vimrc editing
+nnoremap \e :e ~/.ideavimrc<CR>
+nnoremap \R :action IdeaVim.ReloadVimRc.reload<CR>
+
+" Views
+map <leader>z <Action>(ToggleDistractionFreeMode)
+map <leader>a <Action>(Annotate)
+map <Leader>e <Action>(ShowErrorDescription)
+map <Leader>i <Action>(QuickJavaDoc)
+map <leader>h <Action>(Vcs.ShowTabbedFileHistory)
+map <leader>n :set relativenumber!<CR>
+map <leader><enter> <Action>(ShowIntentionActions)
+map <leader>c <Action>(EditorContextInfo)
+"   folding
+map <leader>- <Action>(CollapseRegion)
+map <leader>+ <Action>(ExpandRegion)
+"   Dash by Kapeli
+map <Leader>d <Action>(SmartSearchAction)
+
+" EDITING
+map <leader>v <Action>(CIDR.Lang.IntroduceVariable)
+map <leader>r <Action>(RenameElement)
+map <leader>R <Action>(Refactorings.QuickListPopupAction)
+"map <leader>c <Action>(CommentByLineComment)
+map <leader>l <Action>(ReformatCode)
+"   multiple cursors
+map <A-k> <Action>(EditorCloneCaretAbove)
+map <A-j> <Action>(EditorCloneCaretBelow)
+map <C-A-l> <Action>(EditorAddCaretPerSelectedLine)
+
+" NAVIGATION
+map <leader>m <Action>(ShowTypeBookmarks)
+map <leader>M <Action>(ToggleBookmarkWithMnemonic)
+map <leader>o <Action>(FileStructurePopup)
+map <leader>s <Action>(GotoSymbol)
+map <leader>h <Action>(HideActiveWindow)
+map <leader>b <Action>(RecentFiles)
+"map <leader>F <Action>(GotoFile)
+"map <leader>F <Action>(FileChooser)
+map <C-k> <Action>(Tree-selectPrevious)
+map <C-j> <Action>(Tree-selectNext)
+
+map <leader>t <Action>(SelectInProjectView)
+map <leader>g <Action>(EditorToggleShowGutterIcons)
+map <leader>u <Action>(FindUsages)
+map <C-]> <Action>(GotoDeclaration)
+map gf <Action>(GotoDeclaration)
+"   recent locations
+map <A-h> <Action>(Back)
+map <A-l> <Action>(Forward)
+"   errors
+map gj <Action>(GotoNextError)
+map gk <Action>(GotoPreviousError)
+"   (idea)markers
+map gm <Action>(VcsShowNextChangeMarker)
+map g, <Action>(VcsShowPrevChangeMarker)
+"   search and global search
+map / <Action>(Find)
+map <leader>/ <Action>(FindInPath)
+map n <Action>(FindNext)
+map N <Action>(FindPrevious)
+"   panes
+map <C-l> <Action>(NextSplitter)
+map <C-h> <Action>(PrevSplitter)
+"map kj <Action>(HideActiveWindow)
+" Bookmarks"
+"map <leader>1 <Action>(gotobookmark0)
+" gotobookmark1
+" gotobookmark2
+" gotobookmark3
+" gotobookmark4
+" gotobookmark5
+" gotobookmark6
+" gotobookmark7
+" gotobookmark8
+" gotobookmark9
+
+" BUILDING, DEBUGGING AND RUNNING
+map \b <Action>(ToggleLineBreakpoint)
+map \r <Action>(RunAnything)
+map <leader>C <Action>(ExternalSystem.ProjectRefreshAction)
+map <Leader>B <Action>(CidrBuildRunToolbar)
+map <Leader>G <Action>(Run)
+map <leader>D <Action>(Debug)
+map <leader>S <Action>(Stop)
+map <leader>A <Action>(XDebugger.AttachToProcess)
+
+map \c <Action>(VimFindActionIdAction)
+" Find more examples here: https://jb.gg/share-ideavimrc
+
+nmap \u 0v$:s/typedef/using  =/<CR>f;db0f=hPf;hx

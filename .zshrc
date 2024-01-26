@@ -371,6 +371,11 @@ export JUCE_DIR=~/code/plugins/JUCE
 # Created by `pipx` on 2023-04-10 09:45:09
 export PATH="$PATH:$HOME/.local/bin"
 
+function git-log-submodules ()
+{
+    git log --graph --oneline -U0 --submodule  | grep -E '^[*| /\\]+([0-9a-f]{7} |Submodule |> |$)' | bat -l gitlog
+}
+
 function fix_submodules ()
 {
     git submodule sync --recursive
