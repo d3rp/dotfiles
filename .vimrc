@@ -14,7 +14,8 @@ if &compatible
 endif
 " Add the dein installation directory into runtimepath
 set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
-set runtimepath+=/opt/homebrew/opt/fzf
+" TODO check if on macos
+" set runtimepath+=/opt/homebrew/opt/fzf
 
 " Install with ```call dein#install()```
 if dein#load_state('~/.cache/dein')
@@ -489,7 +490,10 @@ let g:UltiSnipsEditSplit="vertical"
 " => vimwiki
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " VimWiki setup
-let g:vimwiki_list = [{'list_margin': 2}]
+let g:vimwiki_list = [
+            \ {'list_margin': 2},
+            \ {'path': '~/vimwiki/'},
+            \ {'path': '~/docs/work/oeksound/vimwiki/'}]
 let g:vimwiki_listsyms = ' ◤▣'
 "let g:vimwiki_folding = 'list'
 
@@ -525,7 +529,7 @@ let g:tagbar_type_vimwiki = {
           \ , 'sro':'&&&'
           \ , 'kind2scope':{'h':'header'}
           \ , 'sort':0
-          \ , 'ctagsbin':'$HOME/.vim/vimwiki_tags.py'
+          \ , 'ctagsbin': $HOME . '/.vim/vimwiki_tags.py'
           \ , 'ctagsargs': 'default'
           \ }
 let g:tagbar_singleclick = 1
@@ -564,6 +568,6 @@ nnoremap <Leader>n :call NumberToggle()<CR>
 " Quick buffers
 noremap <Leader>b :ls<CR>:b 
 
-"noremap <Leader>W :read !python ~/code/py/print_weekday.py<CR>
+noremap <Leader>W :read !python ~/code/py/print_weekday.py<CR>
 noremap <Leader>W :read !~/code/bin/weekday<CR>
 
